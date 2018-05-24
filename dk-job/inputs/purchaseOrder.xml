@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<orders>
+	<po>
+		<po_1>
+			<purchaseOrder orderDate="2017-09-10">
+				<items>
+					<item>
+						<productName>Adibas Shoes</productName>
+						<quantity>20</quantity>
+						<price>8.95</price>
+						<comment>Messi fan</comment>
+					</item>
+					<item>
+						<productName>Red welwet cake</productName>
+						<quantity>10</quantity>
+						<price>2.95</price>
+					</item>
+				</items>
+				<customer>
+					<name>GuBa</name>
+					<shippingAddress>
+						<street>123 Main Street</street>
+						<city>Mumbai</city>
+						<postalCode>12345</postalCode>
+						<country>IND</country>
+					</shippingAddress>
+					<billingAddress>
+						<street>Charni Road</street>
+						<city>SOBO</city>
+						<postalCode>12345</postalCode>
+						<country>IND</country>
+					</billingAddress>
+					<loyalty>GOLD</loyalty>
+				</customer>
+			</purchaseOrder>
+		</po_1>
+		<po_2>
+			<purchaseOrder orderDate="2017-09-10">
+				<items>
+					<item>
+						<productName>Old monk</productName>
+						<quantity>20</quantity>
+						<price>9.95</price>
+						<comment>Querteriya</comment>
+					</item>
+					<item>
+						<productName>Fugga</productName>
+						<quantity>10</quantity>
+						<price>2.95</price>
+					</item>
+				</items>
+				<customer>
+					<name>ViAj</name>
+					<shippingAddress>
+						<street>Garam Masala</street>
+						<city>Airoli</city>
+						<postalCode>400078</postalCode>
+						<country>IND</country>
+					</shippingAddress>
+					<billingAddress>
+						<street>Garam Masala</street>
+						<city>Airoli</city>
+						<postalCode>400078</postalCode>
+						<country>IND</country>
+					</billingAddress>
+					<loyalty>SILVER</loyalty>
+				</customer>
+			</purchaseOrder>
+		</po_2>
+		<id>123</id>
+		<event>birthday</event>
+	</po>
+</orders>

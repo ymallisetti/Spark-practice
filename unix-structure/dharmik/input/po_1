@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<purchaseOrder orderDate="2017-09-10">
+				<items>
+					<item>
+						<productName>Adibas Shoes</productName>
+						<quantity>20</quantity>
+						<price>8.95</price>
+						<comment>Messi fan</comment>
+					</item>
+					<item>
+						<productName>Red welwet cake</productName>
+						<quantity>10</quantity>
+						<price>2.95</price>
+					</item>
+				</items>
+				<customer>
+					<name>GuBa</name>
+					<shippingAddress>
+						<street>123 Main Street</street>
+						<city>Mumbai</city>
+						<postalCode>12345</postalCode>
+						<country>IND</country>
+					</shippingAddress>
+					<billingAddress>
+						<street>Charni Road</street>
+						<city>SOBO</city>
+						<postalCode>12345</postalCode>
+						<country>IND</country>
+					</billingAddress>
+					<loyalty>GOLD</loyalty>
+				</customer>
+			</purchaseOrder>

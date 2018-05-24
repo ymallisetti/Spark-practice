@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<purchaseOrder orderDate="2018-09-10">
+				<items>
+					<item>
+						<productName>Secret</productName>
+						<quantity>20</quantity>
+						<price>9.95</price>
+						<comment>this is secret product</comment>
+					</item>
+				</items>
+				<customer>
+					<name></name>
+					<shippingAddress>
+						<street>Bhoot nagar</street>
+						<city>Ram galli</city>
+						<postalCode>400078</postalCode>
+						<country>IND</country>
+					</shippingAddress>
+					<billingAddress>
+						<street>A</street>
+						<city>B</city>
+						<postalCode>400078</postalCode>
+						<country>IND</country>
+					</billingAddress>
+					<loyalty>SILVER</loyalty>
+				</customer>
+			</purchaseOrder>

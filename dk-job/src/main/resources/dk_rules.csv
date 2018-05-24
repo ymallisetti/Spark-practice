@@ -1,0 +1,9 @@
+RULE_ID|ORG_CODE|SOURCE_SYSTEM_NAME|ENTITY_NAME|ATTRIBUTE_LIST|RULE_TYPE|PATTERN_TYPE|LOOKUP_CATEGORY|ENTITY_LOOKUP_COL_NAME|EXPECTED_FORMAT|RULE_EXPRESSION|ERROR_MESSAGE|IS_ACTIVE
+CT_001|alask-green|cambay|Address|postal_code|QUALITY|NULL_CHECK|||| case when (entity_name = 'Address')then  null_check(struct(postal_code),'postal_code')END | are mandatory.|true
+CT_002|alask-green|cambay|Customer|name|QUALITY|NULL_CHECK|||| case when (entity_name = 'Customer')then  null_check(struct(name),'name')END | are mandatory.|true
+
+
+
+
+
+
