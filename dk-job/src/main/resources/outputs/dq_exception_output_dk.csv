@@ -1,0 +1,2 @@
+dq_exception_table.org_code,dq_exception_table.application_id,dq_exception_table.entity_name,dq_exception_table.seq_id,dq_exception_table.rule_pattern,dq_exception_table.error_code,dq_exception_table.error_description,dq_exception_table.status,dq_exception_table.created_datetime,dq_exception_table.scry_role_cd,dq_exception_table.aud_load_id,dq_exception_table.aud_load_tm
+alask-green,application_1527150215856_0007,Customer,47,NULL_CHECK,DQ Exception,name  _columns contains the null values,FAILED,2018-05-24 11:31:34.322,GEN,DK_PARSER,2018-05-24

@@ -1,0 +1,34 @@
+--working -/
+spark-submit --master yarn-client --jars $(echo lib/*.* | tr ' ' ','),$(echo conf/*.* | tr ' ' ',') --class com.dk.job.DKSparkJob dk-job-0.0.1.jar jobType=dkdk orgCode=alask-green inputFolder=/dharmik/dkjob/input > output.txt
+
+--Frauddetection
+spark-submit --master yarn-client --class com.dk.training.FraudDetection dk-job-0.0.1.jar > output.txt
+
+kinit -k -t /etc/security/keytabs/ctadmin.keytab ctadmin 
+
+HDFS commands - 
+hdfs dfs -ls /dharmik/dkjob/config
+hdfs dfs -rm /dharmik/dkjob/config/mapping.csv
+hdfs dfs -put dharmik/conf/mapping.csv /dharmik/dkjob/config/
+
+doubts - 
+ parquet is a columnar storage how?
+ spark.sql.parquet.binaryAsString - ?
+ 
+*******************************************************************************************************
+spark-submit --master yarn-client --class com.dk.training.pocmem dk-job-0.0.1.jar jobType=dkdk > output.txt
+--Not working -/
+spark-submit --master yarn-client --jars $(echo lib/*.* | tr ' ' ','),conf/ --conf "spark.driver.extraJavaOptions=-Dlogfile.name=TestK" --packages com.databricks:spark-csv_2.10:1.4.0 --class com.dk.job.DKSparkJob dk-job-0.0.1.jar jobType=dkdk orgCode=alask-green inputFolder=/dharmik/input > output.txt
+
+*******************************************************************************************************
+
+Spark 2.1.0 migration from 1.6.1
+1- udf register argument have removed String support so changed cols to Object
+2- job command is changed 
+3- use sparkContext(sc) from SparkSession => sc = spark.sparkContext
+4- use SqlContext direct from SparkSession => sqlContext.createDataframe = spark.createDataframe
+
+********************************************************************************************************
+Performance improvement
+1- use of kryo serializer instead of default java serializer
+2- 

@@ -49,7 +49,7 @@ object DKSparkJob {
     }
     
     //------------------------Perform Transformation-----------------------------------------------
-    //DKTransformers.performTransformation(parsedDataFramesMap, sparkContext)
+    DKTransformers.performTransformation(parsedDataFramesMap, spark)
 
     //------------------------Saving Job History --------------------------------------------------
     DKDataFrameBuilder.createAndSaveDkJobHistoryDataframe(spark, argsMap)

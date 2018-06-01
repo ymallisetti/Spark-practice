@@ -19,6 +19,8 @@ object Constants {
   
   val HdfsBaseDir="/dharmik/dkjob"
   val RulesFileLocation=HdfsBaseDir.concat("/config/dk_rules.csv")
+  val MppingFileLocation=HdfsBaseDir.concat("/config/mapping.csv")
+  val DkTablesBaseDir = HdfsBaseDir.concat("/tables/")
   val DkJobHistoryLocation = HdfsBaseDir.concat("/tables/jh")
   val DkExceptionsLocation = HdfsBaseDir.concat("/tables/exceptions")
 }

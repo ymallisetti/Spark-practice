@@ -1,0 +1,110 @@
+ 
+********************** Start of my spark job **********************
+Printing all entities
+-- Item
++---+---------------+--------+-----+-----+-----------+
+| id|   product_name|quantity|price|po_id|entity_name|
++---+---------------+--------+-----+-----+-----------+
+|171|          Fugga|      10| 2.95|  184|       Item|
+|187|       Old monk|      20| 9.95|  184|       Item|
+|  3|         Secret|      20| 9.95|  101|       Item|
+|116|Red welwet cake|      10| 2.95|  202|       Item|
+| 74|   Adibas Shoes|      20| 8.95|  202|       Item|
++---+---------------+--------+-----+-----+-----------+
+
+-- PurchaseOrder
++---+--------------------+-----------+-------------+
+| id|          order_date|customer_id|  entity_name|
++---+--------------------+-----------+-------------+
+|184|Sun Sep 10 00:00:...|         46|PurchaseOrder|
+|101|Mon Sep 10 00:00:...|         47|PurchaseOrder|
+|202|Sun Sep 10 00:00:...|          5|PurchaseOrder|
++---+--------------------+-----------+-------------+
+
+-- Customer
++---+----+------------+-----------+------------+-----------+
+| id|name|loyalty_type|bill_add_id|shipp_add_id|entity_name|
++---+----+------------+-----------+------------+-----------+
+| 46|ViAj|      SILVER|         66|         166|   Customer|
+| 47|    |      SILVER|          1|          64|   Customer|
+|  5|GuBa|        GOLD|        174|         118|   Customer|
++---+----+------------+-----------+------------+-----------+
+
+-- Address
++---+---------+-------+-----------+---------------+-----------+
+| id|     city|country|postal_code|         street|entity_name|
++---+---------+-------+-----------+---------------+-----------+
+|166|   Airoli|    IND|     400078|   Garam Masala|    Address|
+| 66|   Airoli|    IND|     400078|   Garam Masala|    Address|
+| 64|Ram galli|    IND|     400078|    Bhoot nagar|    Address|
+|  1|        B|    IND|     400078|              A|    Address|
+|118|   Mumbai|    IND|      12345|123 Main Street|    Address|
+|174|     SOBO|    IND|      12345|    Charni Road|    Address|
++---+---------+-------+-----------+---------------+-----------+
+
+Applying filter condition for DQ dataframes --> ORG_CODE='alask-green' and IS_ACTIVE='true'
+creating data frames from file --> /dharmik/dkjob/config/dk_rules.csv
+Saving exception df
+creating data frames from file --> /dharmik/dkjob/config/mapping.csv
++---------------+---+---+---+-------------+-------------+-------+----+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---+----+
+|ROWKEY         |C1 |C2 |C3 |C4           |C5           |C6     |C7  |C8                                                                                                                                                                                                                                                                                                                                                                                                                                           |C9 |C10 |
++---------------+---+---+---+-------------+-------------+-------+----+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---+----+
+|r_Item         |org|ss |db |Item         |Item         |dk_data|null|{"mapping":[{ "srcColName":"id","destColName":"A10","srcColExpr":"id"},{ "srcColName":"product_name","destColName":"A11","srcColExpr":"product_name"},{ "srcColName":"quantity","destColName":"A12","srcColExpr":"quantity"},{ "srcColName":"price","destColName":"A13","srcColExpr":"price"},{ "srcColName":"po_id","destColName":"A07","srcColExpr":"po_id"},{ "srcColName":"entity_name","destColName":"A06","srcColExpr":"entity_name"}]}|N  |null|
+|r_PurchaseOrder|org|ss |db |PurchaseOrder|PurchaseOrder|dk_data|null|{"mapping":[{ "srcColName":"id","destColName":"A07","srcColExpr":"id"},{ "srcColName":"order_date","destColName":"A08","srcColExpr":"order_date"},{ "srcColName":"customer_id","destColName":"A09","srcColExpr":"customer_id"},{ "srcColName":"entity_name","destColName":"A06","srcColExpr":"entity_name"}]}                                                                                                                                |N  |null|
+|r_Customer     |org|ss |db |Customer     |Customer     |dk_data|null|{"mapping":[{ "srcColName":"id","destColName":"A09","srcColExpr":"id"},{ "srcColName":"name","destColName":"A14","srcColExpr":"name"},{ "srcColName":"bill_add_id","destColName":"A01","srcColExpr":"bill_add_id"},{ "srcColName":"shipp_add_id","destColName":"A15","srcColExpr":"shipp_add_id"},{ "srcColName":"entity_name","destColName":"A06","srcColExpr":"entity_name"}]}                                                             |N  |null|
+|r_Address      |org|ss |db |Address      |Address      |dk_data|null|{"mapping":[{ "srcColName":"id","destColName":"A01","srcColExpr":"id"},{ "srcColName":"city","destColName":"A02","srcColExpr":"city"},{ "srcColName":"country","destColName":"A03","srcColExpr":"country"},{ "srcColName":"postal_code","destColName":"A04","srcColExpr":"postal_code"},{ "srcColName":"street","destColName":"A05","srcColExpr":"street"},{ "srcColName":"entity_name","destColName":"A06","srcColExpr":"entity_name"}]}    |N  |null|
++---------------+---+---+---+-------------+-------------+-------+----+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---+----+
+
+SQL transfromation query ------>
+SELECT id AS A10,product_name AS A11,quantity AS A12,price AS A13,po_id AS A07,entity_name AS A06 FROM __THIS__
++---+---------------+---+----+---+----+
+|A10|A11            |A12|A13 |A07|A06 |
++---+---------------+---+----+---+----+
+|171|Fugga          |10 |2.95|184|Item|
+|187|Old monk       |20 |9.95|184|Item|
+|3  |Secret         |20 |9.95|101|Item|
+|116|Red welwet cake|10 |2.95|202|Item|
+|74 |Adibas Shoes   |20 |8.95|202|Item|
++---+---------------+---+----+---+----+
+
+transformed data --> ()
+SQL transfromation query ------>
+SELECT id AS A09,name AS A14,bill_add_id AS A01,shipp_add_id AS A15,entity_name AS A06 FROM __THIS__
++---+----+---+---+--------+
+|A09|A14 |A01|A15|A06     |
++---+----+---+---+--------+
+|46 |ViAj|66 |166|Customer|
+|47 |    |1  |64 |Customer|
+|5  |GuBa|174|118|Customer|
++---+----+---+---+--------+
+
+transformed data --> ()
+SQL transfromation query ------>
+SELECT id AS A01,city AS A02,country AS A03,postal_code AS A04,street AS A05,entity_name AS A06 FROM __THIS__
++---+---------+---+------+---------------+-------+
+|A01|A02      |A03|A04   |A05            |A06    |
++---+---------+---+------+---------------+-------+
+|166|Airoli   |IND|400078|Garam Masala   |Address|
+|66 |Airoli   |IND|400078|Garam Masala   |Address|
+|64 |Ram galli|IND|400078|Bhoot nagar    |Address|
+|1  |B        |IND|400078|A              |Address|
+|118|Mumbai   |IND|12345 |123 Main Street|Address|
+|174|SOBO     |IND|12345 |Charni Road    |Address|
++---+---------+---+------+---------------+-------+
+
+transformed data --> ()
+SQL transfromation query ------>
+SELECT id AS A07,order_date AS A08,customer_id AS A09,entity_name AS A06 FROM __THIS__
++---+----------------------------+---+-------------+
+|A07|A08                         |A09|A06          |
++---+----------------------------+---+-------------+
+|184|Sun Sep 10 00:00:00 UTC 2017|46 |PurchaseOrder|
+|101|Mon Sep 10 00:00:00 UTC 2018|47 |PurchaseOrder|
+|202|Sun Sep 10 00:00:00 UTC 2017|5  |PurchaseOrder|
++---+----------------------------+---+-------------+
+
+transformed data --> ()
+Transformation process completed
+Saving job history table..
+********************* End of my spark job *************************
+ 

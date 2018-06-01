@@ -1,0 +1,18 @@
+address_id,city,country,postal_code,street,purchase_order_id,order_date,customer_id,item_id,product_name,quantity,price,customer_name,entity_name
+211,,,,,,,17,,,,,ViAj,Customer
+,,,,,105,,,2,Red welwet cake,10,2.95,,Item
+,,,,,105,,,194,Adibas Shoes,20,8.95,,Item
+,,,,,105,Sun Sep 10 00:00:00 UTC 2017,64,,,,,,PurchaseOrder
+202,Airoli,IND,400078,Garam Masala,,,,,,,,,Address
+211,Airoli,IND,400078,Garam Masala,,,,,,,,,Address
+15,Ram galli,IND,400078,Bhoot nagar,,,,,,,,,Address
+37,,,,,,,129,,,,,,Customer
+159,,,,,,,64,,,,,GuBa,Customer
+,,,,,201,,,76,Fugga,10,2.95,,Item
+,,,,,201,,,144,Old monk,20,9.95,,Item
+,,,,,7,,,14,Secret,20,9.95,,Item
+,,,,,201,Sun Sep 10 00:00:00 UTC 2017,17,,,,,,PurchaseOrder
+,,,,,7,Mon Sep 10 00:00:00 UTC 2018,129,,,,,,PurchaseOrder
+37,B,IND,400078,A,,,,,,,,,Address
+210,Mumbai,IND,12345,123 Main Street,,,,,,,,,Address
+159,SOBO,IND,12345,Charni Road,,,,,,,,,Address

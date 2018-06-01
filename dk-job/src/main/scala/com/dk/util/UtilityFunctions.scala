@@ -52,13 +52,11 @@ object UtilityFunctions {
     mappingList.foreach(mappingMap => {
       mapping.append(Mapping(mappingMap.get("srcColExpr").get,
                             mappingMap.get("destColName").get,
-                            mappingMap.get("destColDataType").get,
-                            mappingMap.get("srcColName").get,
-                            mappingMap.get("srcColDataType").get))
+                            mappingMap.get("srcColName").get))
     })
     mapping.toList
   }
   
-  case class Mapping(srcColExpr: String, destColName: String, destColDataType: String, srcColName: String, srcColDataType: String)
+  case class Mapping(srcColExpr: String, destColName: String,  srcColName: String)
 
 }
