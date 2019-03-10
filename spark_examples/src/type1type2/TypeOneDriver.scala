@@ -105,4 +105,43 @@ object TypeOneDriver {
     dfWithYear
   }
 
+  /**
+   * City before the update = Delhi
+Incremental data, updted 
++---+---------+----------+------+----------------------------+----------+-------+-----------+-----------+
+|Id |FirstName|LastName  |Gender|Designation                 |City      |Country|CreatedDate|CreatedYear|
++---+---------+----------+------+----------------------------+----------+-------+-----------+-----------+
+|5  |Joelly   |Wellbank  |Female|Account Mnager              |Whitehorse|Canada |2009-07-01 |2009       |
+|9  |Celie    |Trevaskiss|Female|Structural Analysis Engineer|Mumbai    |India  |2018-12-14 |2018       |
++---+---------+----------+------+----------------------------+----------+-------+-----------+-----------+
+
+Years for which the data has been changed and those partitions will be updated
+2018 2009
+Gel all employee data only for years which are present in incremental data
++---+---------+----------+------+----------------------------+----------+-------+-----------+-----------+
+|Id |FirstName|LastName  |Gender|Designation                 |City      |Country|CreatedDate|CreatedYear|
++---+---------+----------+------+----------------------------+----------+-------+-----------+-----------+
+|5  |Joelly   |Wellbank  |Female|Account Coordinator         |Whitehorse|Canada |2009-07-01 |2009       |
+|9  |Celie    |Trevaskiss|Female|Structural Analysis Engineer|Delhi     |India  |2018-12-14 |2018       |
+|10 |Jody     |Rude      |Female|Developer                   |New york  |US     |2018-12-11 |2018       |
++---+---------+----------+------+----------------------------+----------+-------+-----------+-----------+
+
+Get all employee data which are not in the incremental data
++---+---------+--------+------+-----------+--------+-------+-----------+-----------+
+|Id |FirstName|LastName|Gender|Designation|City    |Country|CreatedDate|CreatedYear|
++---+---------+--------+------+-----------+--------+-------+-----------+-----------+
+|10 |Jody     |Rude    |Female|Developer  |New york|US     |2018-12-11 |2018       |
++---+---------+--------+------+-----------+--------+-------+-----------+-----------+
+
+Staging dataframe
++---+---------+----------+------+----------------------------+----------+-------+-----------+-----------+
+|Id |FirstName|LastName  |Gender|Designation                 |City      |Country|CreatedDate|CreatedYear|
++---+---------+----------+------+----------------------------+----------+-------+-----------+-----------+
+|10 |Jody     |Rude      |Female|Developer                   |New york  |US     |2018-12-11 |2018       |
+|5  |Joelly   |Wellbank  |Female|Account Mnager              |Whitehorse|Canada |2009-07-01 |2009       |
+|9  |Celie    |Trevaskiss|Female|Structural Analysis Engineer|Mumbai    |India  |2018-12-14 |2018       |
++---+---------+----------+------+----------------------------+----------+-------+-----------+-----------+
+
+City after the update = Mumbai
+   */
 }

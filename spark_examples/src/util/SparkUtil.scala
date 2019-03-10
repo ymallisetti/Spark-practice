@@ -21,4 +21,17 @@ object SparkUtil {
     df
   }
   
+  def setupLocalSparkEnv = {
+    import org.apache.log4j.{ Level, Logger }
+    Logger.getLogger("org").setLevel(Level.ERROR) //set the logger level 
+
+    //set the property for hadoop home to work spark on local
+    System.setProperty("hadoop.home.dir", "D:\\upload\\dharmik\\winutils")
+  }
+  
+  def getLocalSparkSession : SparkSession = {
+    setupLocalSparkEnv
+    SparkSession.builder().master("local[1]").getOrCreate
+  }
+  
 }

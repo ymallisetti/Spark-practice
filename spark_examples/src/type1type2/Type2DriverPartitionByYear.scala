@@ -24,7 +24,7 @@ import org.apache.spark.sql.SaveMode
 object Type2DriverPartitionByYear {
 
   def main(args: Array[String]): Unit = {
-    println("Start of Crap2")
+    println("Start of Type2DriverPartitionByYear")
     import org.apache.log4j.{ Level, Logger }
     Logger.getLogger("org").setLevel(Level.ERROR) //set the logger level 
     System.setProperty("hadoop.home.dir", "D:\\upload\\dharmik\\winutils")
@@ -42,7 +42,7 @@ object Type2DriverPartitionByYear {
     }
 
     dataToProcessDf.write.partitionBy("year").mode(SaveMode.Overwrite).option("header", true).csv(outputPath)
-    println("End of Crap2")
+    println("End of Type2DriverPartitionByYear")
   }
 
   def handleType2Update(spark: SparkSession, historicalDataPath: String): DataFrame = {
@@ -146,5 +146,54 @@ object Type2DriverPartitionByYear {
     var skipColumns = Array("EffFromDate", "EffToDate", "BirthDate")
     allColumns.filterNot(skipColumns contains (_)).map(colName => col(colName))
   }
+  
+  /**
+   * Starting Type2 updates
+Historical data filteres
++---------+---------+----------+--------+------+---------+-------+-----+-------------------+-------------------+-------------------+----+
+|PatientID|FirstName|MiddleName|LastName|Gender|City     |ZipCode|State|EffFromDate        |EffToDate          |BirthDate          |year|
++---------+---------+----------+--------+------+---------+-------+-----+-------------------+-------------------+-------------------+----+
+|101      |Rakesh   |Kumar     |Sinha   |M     |Ahmedabad|38000  |GJ   |2015-02-18 00:00:00|9999-12-31 00:00:00|1960-08-23 00:00:00|1960|
+|101      |Rakesh   |Kumar     |Sinha   |M     |Pune     |411002 |MH   |2014-03-08 00:00:00|2015-02-17 00:00:00|1960-08-23 00:00:00|1960|
+|101      |Rakesh   |Kumar     |Sinha   |M     |Mumbai   |400123 |MH   |2010-01-01 00:00:00|2014-03-07 00:00:00|1960-08-23 00:00:00|1960|
+|105      |Malkhan  |Singh     |Rana    |M     |Chennai  |100456 |TN   |2016-05-13 00:00:00|9999-12-31 00:00:00|1960-08-27 00:00:00|1960|
++---------+---------+----------+--------+------+---------+-------+-----+-------------------+-------------------+-------------------+----+
+
+Incremental data
++---------+---------+----------+--------+------+---------+-------+-----+-----------+----------+----------+----+
+|PatientID|FirstName|MiddleName|LastName|Gender|City     |ZipCode|State|EffFromDate|EffToDate |BirthDate |year|
++---------+---------+----------+--------+------+---------+-------+-----+-----------+----------+----------+----+
+|101      |Rakesh   |Kumar     |Sinha   |M     |Ahmedabad|38000  |GJ   |2015-02-18 |9999-12-31|1960-08-23|1960|
++---------+---------+----------+--------+------+---------+-------+-----+-----------+----------+----------+----+
+
+Pat Id To Remove From Incremental == 101
+Incremental data after removing duplicate records comparing with historical
++---------+---------+----------+--------+------+----+-------+-----+-----------+---------+---------+----+---------------+
+|PatientID|FirstName|MiddleName|LastName|Gender|City|ZipCode|State|EffFromDate|EffToDate|BirthDate|year|target_checksum|
++---------+---------+----------+--------+------+----+-------+-----+-----------+---------+---------+----+---------------+
++---------+---------+----------+--------+------+----+-------+-----+-----------+---------+---------+----+---------------+
+
+Union of data
++---------+---------+----------+--------+------+---------+-------+-----+-------------------+-------------------+-------------------+----+
+|PatientID|FirstName|MiddleName|LastName|Gender|City     |ZipCode|State|EffFromDate        |EffToDate          |BirthDate          |year|
++---------+---------+----------+--------+------+---------+-------+-----+-------------------+-------------------+-------------------+----+
+|101      |Rakesh   |Kumar     |Sinha   |M     |Ahmedabad|38000  |GJ   |2015-02-18 00:00:00|9999-12-31 00:00:00|1960-08-23 00:00:00|1960|
+|101      |Rakesh   |Kumar     |Sinha   |M     |Pune     |411002 |MH   |2014-03-08 00:00:00|2015-02-17 00:00:00|1960-08-23 00:00:00|1960|
+|101      |Rakesh   |Kumar     |Sinha   |M     |Mumbai   |400123 |MH   |2010-01-01 00:00:00|2014-03-07 00:00:00|1960-08-23 00:00:00|1960|
+|105      |Malkhan  |Singh     |Rana    |M     |Chennai  |100456 |TN   |2016-05-13 00:00:00|9999-12-31 00:00:00|1960-08-27 00:00:00|1960|
++---------+---------+----------+--------+------+---------+-------+-----+-------------------+-------------------+-------------------+----+
+
+Applying window operation..
++---------+---------+----------+--------+------+---------+-------+-----+-----------+----------+----------+----+
+|PatientID|FirstName|MiddleName|LastName|Gender|City     |ZipCode|State|EffFromDate|EffToDate |BirthDate |year|
++---------+---------+----------+--------+------+---------+-------+-----+-----------+----------+----------+----+
+|101      |Rakesh   |Kumar     |Sinha   |M     |Ahmedabad|38000  |GJ   |2015-02-18 |9999-12-31|1960-08-23|1960|
+|101      |Rakesh   |Kumar     |Sinha   |M     |Pune     |411002 |MH   |2014-03-08 |2015-02-17|1960-08-23|1960|
+|101      |Rakesh   |Kumar     |Sinha   |M     |Mumbai   |400123 |MH   |2010-01-01 |2014-03-07|1960-08-23|1960|
+|105      |Malkhan  |Singh     |Rana    |M     |Chennai  |100456 |TN   |2016-05-13 |9999-12-31|1960-08-27|1960|
++---------+---------+----------+--------+------+---------+-------+-----+-----------+----------+----------+----+
+
+End of Type2 updates
+   */
 
 }
