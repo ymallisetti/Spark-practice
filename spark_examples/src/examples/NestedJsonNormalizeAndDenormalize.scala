@@ -14,7 +14,7 @@ object NestedJsonNormalizeAndDenormalize {
     println("Start of NestedJsonNormalizeAndDenormalize example")
     val spark = getLocalSparkSession
 
-    val hl7DF = getRawJsonDF(spark)
+    val hl7DF = getRawJsonDF(spark,"hl7-msg.json")
     hl7DF.show(false)
 
     val entityTuple = normalizeJsonDocumentToEntities(hl7DF, spark)
@@ -69,6 +69,14 @@ object NestedJsonNormalizeAndDenormalize {
   }
 
   def getSimpleSegmentDF(rawDF: DataFrame, segmentName: String, spark: SparkSession): DataFrame = {
+    /*
+     * if HL7 message does not have nested Patient information, means only in the root, 
+     * then instead of selected Patient columns one by one, just identify header columns 
+     * to drop and we will get PatientRawDF as expected
+     * 
+     * val headerCols = List("HL7Version","MessageID","MessageType","DestinationSystem","DateTimeMessage","SourceSystem")
+    	 hl7DF.drop(headerCols:_*).show(false)
+     */
     import spark.implicits._
     val segmentCols = rawDF.select(segmentName + ".*").schema.fieldNames.toList //get column names
     rawDF.select(segmentName + ".*")
@@ -97,11 +105,11 @@ object NestedJsonNormalizeAndDenormalize {
     tuple._3.show(false)
   }
 
-  def getRawJsonDF(spark: SparkSession): DataFrame = {
+  def getRawJsonDF(spark: SparkSession,fileName:String): DataFrame = {
     spark
       .read
       .option("mode", "DROPMALFORMED")
-      .json("inputs/hl7-msg.json")
+      .json("inputs/"+fileName)
   }
-
+  
 }
