@@ -18,10 +18,17 @@ import org.apache.spark.sql.types.DataType
 import org.apache.spark.sql.types.LongType
 import scala.util.Success
 import scala.util.Failure
+import java.text.SimpleDateFormat
+import scala.util.control._
+import scala.util.Try
 
 object DataFrameTransformation {
 
+  //the case classes are defined in the SparkUtil as it is used in Unit test cases
   //case class Mapping(DESTINATION_COL_NAME: String, DESTINATION_DATATYPE: String,SOURCE_COL_NAME: String, SOURCE_DATATYPE: String,TRANSFORM_TYPE: String, SOURCE_EXPRESSION: String)
+  //case class PPat(PAT_ID: String, FIRST_NAME: String, LAST_NAME: String, CITY: String, ZIP_CODE: String, GENDER: String, STATE: String, BIRTH_DATE:String)
+
+  val date_formats = List("yyyy/MM/dd", "dd/MM/yyyy", "ddMMyyyy", "dd-MMM-yyyy", "dd-MM-yyyy")
 
   def main(args: Array[String]): Unit = {
     println("Start of DataFrameTransformation demo example")
@@ -80,36 +87,72 @@ object DataFrameTransformation {
     readDataFrame(spark, "inputs/patient_transformation.csv")
   }
 
-  def getSourcePatient = {
-    List(PPat("10001", "Joe", "Root", "Birmingham", "00089", "M", "Wales"),
-      PPat("10002", "Jason", "Holder", "Cape Guena", "100000", "M", "Test State"),
-      PPat("10003", "Virat", "Kohli", "Delhi", "110000", "M", "Delhi"))
-  }
-
   val performFunctionTransformation = (mapping: Mapping, srcDF: DataFrame, spark: SparkSession) =>
     srcDF.withColumn(mapping.DESTINATION_COL_NAME, expr(mapping.SOURCE_EXPRESSION))
 
-  def castDestinationToDataType(transformedDF: DataFrame, mapping : Mapping, Spark: SparkSession): DataFrame = {
-      import scala.util.Try
-      /**
-       * to handle cases
-       * when cast of column does not work and gives null values but not an exception
-       * handle actual exception when parsing Dates and timestamp
-       */
-      if (transformedDF.hasColumn(mapping.DESTINATION_COL_NAME))
-        transformedDF.withColumn(mapping.DESTINATION_COL_NAME, col(mapping.DESTINATION_COL_NAME).cast(mapping.DESTINATION_DATATYPE))
-      else transformedDF
+  /**
+   * to handle cases
+   * when cast of column does not work and gives null values but not an exception
+   * handle actual exception when parsing Dates and TimeStamp
+   */
+  def castDestinationToDataType(transformedDF: DataFrame, mapping: Mapping, spark: SparkSession): DataFrame = {
+    import scala.util.Try
+
+    //register the UDF to be used when coolumn type is date
+    spark.udf.register("toDateFormatType", dateFormatUdf)
+
+    val destDataType = mapping.DESTINATION_DATATYPE
+    if (destDataType.equalsIgnoreCase("Date"))
+      transformedDF.withColumn(mapping.DESTINATION_COL_NAME, expr("toDateFormatType(" + mapping.SOURCE_COL_NAME + ")"))
+    else if (transformedDF.hasColumn(mapping.DESTINATION_COL_NAME))
+      transformedDF.withColumn(mapping.DESTINATION_COL_NAME, col(mapping.DESTINATION_COL_NAME).cast(destDataType))
+    else transformedDF
   }
-    
-  def getSparkDataTypeFromDBDataType(dbDataType:String) : DataType = {
+
+  /**
+   * cast can directly work on Int or IntegerType etc
+   * same with Long or LongType
+   */
+  def getSparkDataTypeFromDBDataType(dbDataType: String): DataType = {
     dbDataType match {
-      case "Int" => IntegerType
+      case "Int"  => IntegerType
       case "Long" => LongType
+      case _      => StringType
     }
   }
-  
+
+  /**
+   * UDF to be used for formatting dates for the supplied column values for each row.
+   * The UDF will scan for each availbale date formats and try to parse the date and
+   * returns the first not null dates successfully parsed.
+   */
+  val loop = new Breaks;
+  val dateFormatUdf = udf((dateSample: String) => {
+    var date: java.sql.Date = null
+    loop.breakable {
+      date_formats foreach { date_format =>
+        if (date_format.length.equals(dateSample.length)) { //to optimize and filter dates
+          val sdf = new SimpleDateFormat(date_format)
+          sdf.setLenient(false)
+          val parsedDate = Try(sdf.parse(dateSample))
+          if (parsedDate.isSuccess) {
+            date = new java.sql.Date(parsedDate.get.getTime)
+            loop.break
+          }
+        } //if condition
+      } // for each
+    }
+    date
+  })
+
+  def getSourcePatient = {
+    List(PPat("10001", "Joe", "Root", "Birmingham", "00089", "M", "Wales", "1988/02/20"),
+      PPat("10002", "Jason", "Holder", "Cape Guena", "100000", "M", "Test State", "17-09-1967"),
+      PPat("10003", "Virat", "Kohli", "Delhi", "110000", "M", "Delhi", "12-JAN-2000"))
+  }
+
   implicit class DataFrameHelper(df: DataFrame) {
-      import scala.util.Try //to avoid AnalysisException
-      def hasColumn(column: String) = Try(df(column)).isSuccess
-}
+    import scala.util.Try //to avoid AnalysisException
+    def hasColumn(column: String) = Try(df(column)).isSuccess
+  }
 }
