@@ -12,6 +12,9 @@ import org.apache.spark.sql.Encoders
 
 object SparkUtil {
   
+  case class Mapping(DESTINATION_COL_NAME: String, DESTINATION_DATATYPE: String,SOURCE_COL_NAME: String, SOURCE_DATATYPE: String,TRANSFORM_TYPE: String, SOURCE_EXPRESSION: String)
+  case class PPat(PAT_ID: String, FIRST_NAME: String, LAST_NAME: String, CITY: String, ZIP_CODE: String, GENDER: String, STATE: String, BIRTH_DATE:String)
+  
   def readDataFrame(spark:SparkSession,location:String):DataFrame={
     val df = spark.read
       .format("com.databricks.spark.csv")

@@ -1,26 +1,26 @@
 package examples
 
-import org.apache.spark.sql.SparkSession
-import org.apache.spark.sql.functions._
-import org.apache.spark.sql.SaveMode
-import java.nio.charset.StandardCharsets
-import util.SparkUtil._
-import org.apache.spark.sql.Row
-import org.apache.spark.TaskContext
-import org.apache.spark.sql.Encoders
-import org.apache.spark.sql.DataFrame
-import org.apache.spark.sql.types.StructType
-import org.apache.spark.sql.types.IntegerType
-import org.apache.spark.sql.types.StructField
-import org.apache.spark.sql.types.StringType
-import scala.collection.mutable.ListBuffer
-import org.apache.spark.sql.types.DataType
-import org.apache.spark.sql.types.LongType
-import scala.util.Success
-import scala.util.Failure
 import java.text.SimpleDateFormat
-import scala.util.control._
+
+import scala.collection.mutable.ListBuffer
 import scala.util.Try
+import scala.util.control.Breaks
+
+import org.apache.spark.sql.DataFrame
+import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.functions.col
+import org.apache.spark.sql.functions.expr
+import org.apache.spark.sql.functions.lit
+import org.apache.spark.sql.functions.udf
+import org.apache.spark.sql.types.DataType
+import org.apache.spark.sql.types.IntegerType
+import org.apache.spark.sql.types.LongType
+import org.apache.spark.sql.types.StringType
+
+import util.SparkUtil.Mapping
+import util.SparkUtil.PPat
+import util.SparkUtil.getLocalSparkSession
+import util.SparkUtil.readDataFrame
 
 object DataFrameTransformation {
 
@@ -96,7 +96,6 @@ object DataFrameTransformation {
    * handle actual exception when parsing Dates and TimeStamp
    */
   def castDestinationToDataType(transformedDF: DataFrame, mapping: Mapping, spark: SparkSession): DataFrame = {
-    import scala.util.Try
 
     //register the UDF to be used when coolumn type is date
     spark.udf.register("toDateFormatType", dateFormatUdf)
@@ -152,7 +151,7 @@ object DataFrameTransformation {
   }
 
   implicit class DataFrameHelper(df: DataFrame) {
-    import scala.util.Try //to avoid AnalysisException
+ //to avoid AnalysisException
     def hasColumn(column: String) = Try(df(column)).isSuccess
   }
 }
