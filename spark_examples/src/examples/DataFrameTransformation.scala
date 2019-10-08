@@ -1,32 +1,34 @@
 package examples
 
-import java.text.SimpleDateFormat
-
-import scala.collection.mutable.ListBuffer
-import scala.util.Try
-import scala.util.control.Breaks
-
-import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.SparkSession
-import org.apache.spark.sql.functions.col
-import org.apache.spark.sql.functions.expr
-import org.apache.spark.sql.functions.lit
-import org.apache.spark.sql.functions.udf
-import org.apache.spark.sql.types.DataType
+import org.apache.spark.sql.functions._
+import org.apache.spark.sql.SaveMode
+import java.nio.charset.StandardCharsets
+import util.SparkUtil._
+import org.apache.spark.sql.Row
+import org.apache.spark.TaskContext
+import org.apache.spark.sql.Encoders
+import org.apache.spark.sql.DataFrame
+import org.apache.spark.sql.types.StructType
 import org.apache.spark.sql.types.IntegerType
-import org.apache.spark.sql.types.LongType
+import org.apache.spark.sql.types.StructField
 import org.apache.spark.sql.types.StringType
-
-import util.SparkUtil.Mapping
-import util.SparkUtil.PPat
-import util.SparkUtil.getLocalSparkSession
-import util.SparkUtil.readDataFrame
+import scala.collection.mutable.ListBuffer
+import org.apache.spark.sql.types.DataType
+import org.apache.spark.sql.types.LongType
+import scala.util.Success
+import scala.util.Failure
+import java.text.SimpleDateFormat
+import scala.util.control._
+import scala.util.Try
 
 object DataFrameTransformation {
 
   //the case classes are defined in the SparkUtil as it is used in Unit test cases
   //case class Mapping(DESTINATION_COL_NAME: String, DESTINATION_DATATYPE: String,SOURCE_COL_NAME: String, SOURCE_DATATYPE: String,TRANSFORM_TYPE: String, SOURCE_EXPRESSION: String)
   //case class PPat(PAT_ID: String, FIRST_NAME: String, LAST_NAME: String, CITY: String, ZIP_CODE: String, GENDER: String, STATE: String, BIRTH_DATE:String)
+  val codes = Seq(("M", "Male"), ("F", "Female"), ("O", "Others"), ("A", "Asian"), ("E", "English"),
+                  ("MA", "Married"), ("S", "Single"), ("H", "Hindu"), ("J", "Jewish"),("Y","Yes"))
 
   val date_formats = List("yyyy/MM/dd", "dd/MM/yyyy", "ddMMyyyy", "dd-MMM-yyyy", "dd-MM-yyyy")
 
@@ -59,9 +61,10 @@ object DataFrameTransformation {
             columnsToDrop += (mapping.SOURCE_COL_NAME)
             tempDF = columnValueMapping(mapping, tempDF, spark)
           }
-          case "CONSTANT" => tempDF = tempDF.withColumn(mapping.DESTINATION_COL_NAME, lit(mapping.SOURCE_EXPRESSION))
-          case "FUNCTION" => tempDF = performFunctionTransformation(mapping, tempDF, spark)
-          case _          => tempDF
+          case "CONSTANT"        => tempDF = tempDF.withColumn(mapping.DESTINATION_COL_NAME, lit(mapping.SOURCE_EXPRESSION))
+          case "FUNCTION"        => tempDF = performFunctionTransformation(mapping, tempDF, spark)
+          case "STANDARDIZATION" => tempDF = codeStandardization(mapping, tempDF, spark)
+          case _                 => tempDF
         }
         tempDF = castDestinationToDataType(tempDF, mapping, spark)
     }
@@ -84,7 +87,7 @@ object DataFrameTransformation {
   }
 
   def getTransformationMapping(spark: SparkSession): DataFrame = {
-    readDataFrame(spark, "inputs/patient_transformation.csv")
+    readDataFrame(spark, "inputs/patient_transformation_test.csv")
   }
 
   val performFunctionTransformation = (mapping: Mapping, srcDF: DataFrame, spark: SparkSession) =>
@@ -96,6 +99,7 @@ object DataFrameTransformation {
    * handle actual exception when parsing Dates and TimeStamp
    */
   def castDestinationToDataType(transformedDF: DataFrame, mapping: Mapping, spark: SparkSession): DataFrame = {
+    import scala.util.Try
 
     //register the UDF to be used when coolumn type is date
     spark.udf.register("toDateFormatType", dateFormatUdf)
@@ -103,7 +107,7 @@ object DataFrameTransformation {
     val destDataType = mapping.DESTINATION_DATATYPE
     if (destDataType.equalsIgnoreCase("Date"))
       transformedDF.withColumn(mapping.DESTINATION_COL_NAME, expr("toDateFormatType(" + mapping.SOURCE_COL_NAME + ")"))
-    else if (transformedDF.hasColumn(mapping.DESTINATION_COL_NAME))
+    else if (transformedDF.hasColumn(mapping.DESTINATION_COL_NAME) && !destDataType.isEmpty)
       transformedDF.withColumn(mapping.DESTINATION_COL_NAME, col(mapping.DESTINATION_COL_NAME).cast(destDataType))
     else transformedDF
   }
@@ -144,6 +148,14 @@ object DataFrameTransformation {
     date
   })
 
+  def codeStandardization(mapping: Mapping, df: DataFrame, spark: SparkSession): DataFrame = {
+    import spark.implicits._
+    val codesDF = codes.toDF("BeforeCode", "AfterCode")
+    df.join(codesDF, df(mapping.SOURCE_COL_NAME) === codesDF("BeforeCode"), "left") //to broadcast the code list
+      .drop("BeforeCode", mapping.SOURCE_COL_NAME)
+      .withColumnRenamed("AfterCode", mapping.DESTINATION_COL_NAME)
+  }
+
   def getSourcePatient = {
     List(PPat("10001", "Joe", "Root", "Birmingham", "00089", "M", "Wales", "1988/02/20"),
       PPat("10002", "Jason", "Holder", "Cape Guena", "100000", "M", "Test State", "17-09-1967"),
@@ -151,7 +163,7 @@ object DataFrameTransformation {
   }
 
   implicit class DataFrameHelper(df: DataFrame) {
- //to avoid AnalysisException
+    import scala.util.Try //to avoid AnalysisException
     def hasColumn(column: String) = Try(df(column)).isSuccess
   }
 }

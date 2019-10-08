@@ -17,12 +17,7 @@ case class TTable(one:String,two:String,three:String,four:String,five:String,six
 object DataFrameBuilderOptions {
   def main(args: Array[String]): Unit = {
     println("Start of DataFrameBuilderOptions")
-    import org.apache.log4j.{ Level, Logger }
-    Logger.getLogger("org").setLevel(Level.ERROR) //set the logger level 
-
-    //set the property for hadoop home to work spark on local
-    System.setProperty("hadoop.home.dir", "D:\\upload\\dharmik\\winutils")
-    val spark = SparkSession.builder().master("local[*]").getOrCreate()
+    val spark = SparkUtil.getLocalSparkSession
     
     createDataFrameFromTestData(spark)
 
@@ -39,9 +34,10 @@ object DataFrameBuilderOptions {
       Employee("George", 21, "Sr.Software Engineer", 4000, 98798),
       Employee("Matt", 21, "Sr.Software Engineer", 4000, 98798))
     
-    import spark.implicits._
+    import spark.implicits._ 
     val empDf = employeesData.toDF
     empDf.show
+    
 
   }
   

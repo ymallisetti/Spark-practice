@@ -1,4 +1,4 @@
-package testingdemos
+/*package testingdemos
 
 import org.mockito.Matchers._
 import org.mockito.Mockito
@@ -28,4 +28,4 @@ class ScalaMockExamples extends WordSpec with Matchers {
     assert(johndoe.get == User("johndoe"))
     assert(joehacker == None)
   }
-}
+}*/

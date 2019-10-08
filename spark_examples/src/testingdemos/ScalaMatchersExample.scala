@@ -1,4 +1,4 @@
-package testingdemos
+/*package testingdemos
 
 import org.scalatest.{ Matchers, WordSpec }
 
@@ -16,4 +16,4 @@ class ScalaMatchersExample extends WordSpec with Matchers {
       'title("SomeBook"),
       'author("Jane"))
   }
-}
+}*/

@@ -22,6 +22,7 @@ object NestedJsonNormalizeAndDenormalize {
 
     val denormalizedJsonDF = denormalizeEntitiesToJsonDocument(entityTuple)
     denormalizedJsonDF.show(false)
+    denormalizedJsonDF.write.json("D:\\junk\\nested")
 
     println("End of NestedJsonNormalizeAndDenormalize example")
   }
@@ -48,7 +49,7 @@ object NestedJsonNormalizeAndDenormalize {
    * the function will combine entities Patient, PatientVisit and Diagnosis to form
    * one single nested JSON document
    */
-  def denormalizeEntitiesToJsonDocument(tuple: (DataFrame, DataFrame, DataFrame)) = {
+  def denormalizeEntitiesToJsonDocument(tuple: (DataFrame, DataFrame, DataFrame)) : DataFrame= {
     println("De normalize process started")
     val patientDF = tuple._1
     val patientVisitDF = tuple._2
@@ -109,7 +110,7 @@ object NestedJsonNormalizeAndDenormalize {
     spark
       .read
       .option("mode", "DROPMALFORMED")
-      .json("inputs/"+fileName)
+      .json("inputs/jsons/"+fileName)
   }
   
 }

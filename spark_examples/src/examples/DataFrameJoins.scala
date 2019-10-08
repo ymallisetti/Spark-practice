@@ -16,17 +16,19 @@ object DataFrameJoins {
 
     val spark = getLocalSparkSession
     val custDf = spark.createDataFrame(getAllRailCustomers)
+    custDf.show
     val ticketsDf = spark.createDataFrame(getAllConfirmSeatDetails)
+    ticketsDf.show
     
     innerJoinDemos(custDf, ticketsDf,spark)
     
-    leftAndRightJoinDemos(custDf, ticketsDf,spark)
+    //leftAndRightJoinDemos(custDf, ticketsDf,spark)
     
-    left_semi_JoineDemos(custDf, ticketsDf,spark)
+    //left_semi_JoineDemos(custDf, ticketsDf,spark)
     
     left_anti_JoineDemos(custDf, ticketsDf,spark)
     
-    println("Start of DataFrameJoins example")
+    println("End of DataFrameJoins example")
   }
   
   def left_semi_JoineDemos(custDf:DataFrame,ticketsDf:DataFrame,spark:SparkSession) {

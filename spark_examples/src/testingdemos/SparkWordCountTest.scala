@@ -1,17 +1,16 @@
-package testingdemos
+/*package testingdemos
 
-import org.scalatest.FunSuite
-import org.apache.spark.SharedSparkContext
 import org.apache.spark.sql.SparkSession
-import org.apache.spark.sql.SQLContext
-import org.scalatest.BeforeAndAfterEach
-import util.SparkUtil
 import org.scalatest.BeforeAndAfterAll
+import org.scalatest.FunSuite
 
-class SparkWordCountTest extends FunSuite with SparkSessionTestWrapper with BeforeAndAfterAll {
+import util.SparkUtil
 
-  /*val sqlContext = new SQLContext(sc);
-  val spark = sqlContext.sparkSession*/
+class SparkWordCountTest extends FunSuite with SparkSessionTestWrapper with BeforeAndAfterAll
+{
+
+  val sqlContext = new SQLContext(sc);
+  val spark = sqlContext.sparkSession
 
   import spark.implicits._
   test("Word counts should be equal to expected with 2 size") {
@@ -28,7 +27,7 @@ class SparkWordCountTest extends FunSuite with SparkSessionTestWrapper with Befo
       ("liverpool")).toDF("team")
     assert(sourceDF.count === 3)
   }
-
+  
   override def afterAll() {
     spark.stop()
   }
@@ -39,3 +38,4 @@ trait SparkSessionTestWrapper {
   lazy val spark: SparkSession = SparkUtil.getLocalSparkSession
 }
 
+*/

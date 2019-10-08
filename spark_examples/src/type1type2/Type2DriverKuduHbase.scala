@@ -26,9 +26,10 @@ object Type2DriverKuduHbase {
     import spark.implicits._
     val masterDataDF=SparkUtil.readDataFrame(spark, "inputs/patient_dim.csv")
     val patientIncDf=SparkUtil.readDataFrame(spark, "inputs/patient_inc.csv")
-    println("Patient DIM historical")
+    /*println("Patient DIM historical")
     masterDataDF.show(false)
-    //patientIncDf.show(false)
+    println("Patient DIM Incremental")
+    patientIncDf.show(false)*/
     
     val incrementalDataWithSurrogateKeys = patientIncDf.withColumn("PatientSk", unix_timestamp+monotonically_increasing_id)
                                        .withColumn("EffToDate", lit("9999-12-31"))
@@ -59,9 +60,13 @@ object Type2DriverKuduHbase {
   def getDataToUpdateWithChecksum(incrementalData: DataFrame, historicalData: DataFrame, spark: SparkSession,
                                   columnsFromDimPat: Array[String],patIds:Array[String]): DataFrame = {
     import spark.implicits._
+    println("Incremrental data with hash")
     val incrementalDataWithHashDF = incrementalData.withColumn("Hash", hash(getColumnNamesToTrack(columnsFromDimPat): _*))
+    incrementalDataWithHashDF.show(false)
 
+    println("Historical data with hash")
     val masterDataWithHashDF = historicalData.withColumn("Hash", hash(getColumnNamesToTrack(columnsFromDimPat): _*))
+    masterDataWithHashDF.show(false)
 
     println("patients to update from DIM table")
     val finalPatientDimListToUpdate = masterDataWithHashDF.join(incrementalDataWithHashDF, Seq("Hash"), "leftanti").drop("Hash")
