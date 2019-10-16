@@ -1,7 +1,8 @@
-*.cache-main
-SparkScalaPractice/.settings/org.eclipse.jdt.core.prefs
-*.class
 *.prefs
 kafka-examples/src/test/java/com/dk/DKparser/AppTest.java
-spark_examples/target/classes/employee_historical.csv
-spark_examples/target/classes/employee_inc.csv
+target
+spark-warehouse
+.settings
+.cache-main
+.cache-tests
+.metadata/
