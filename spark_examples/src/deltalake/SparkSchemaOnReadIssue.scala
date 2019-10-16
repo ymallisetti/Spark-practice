@@ -34,7 +34,7 @@ object SparkSchemaOnReadIssue {
     val df = spark.read
       .format("csv")
       .option("header", "true") // Use first line of all files as header
-      //.option("inferSchema", "true") // Automatically infer data types
+      .option("inferSchema", "true") // Automatically infer data types
       .load(writeLocation)
     println("Showing the appended file data")
     
