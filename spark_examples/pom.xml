@@ -10,52 +10,43 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<scala.version>2.11.8</scala.version>
-		<spark.version>2.3.1</spark.version>
+		<spark.version>2.4.4</spark.version>
+		<scala.compiler.version>2.11</scala.compiler.version>
 	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.spark</groupId>
-			<artifactId>spark-core_2.11</artifactId>
+			<artifactId>spark-core_${scala.compiler.version}</artifactId>
 			<version>${spark.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.spark</groupId>
-			<artifactId>spark-sql_2.11</artifactId>
-			<version>${spark.version}</version>
-		</dependency>
-		<!--<dependency>
-			<groupId>org.apache.spark</groupId>
-			<artifactId>spark-mllib_2.11</artifactId>
-			<version>${spark.version}</version>
-		</dependency>
-		 <dependency>
-			<groupId>org.apache.spark</groupId>
-			<artifactId>spark-streaming_2.11</artifactId>
+			<artifactId>spark-sql_${scala.compiler.version}</artifactId>
 			<version>${spark.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.databricks</groupId>
-			<artifactId>spark-avro_2.11</artifactId>
-			<version>3.0.0</version>
-		</dependency> -->
+		    <groupId>io.delta</groupId>
+		    <artifactId>delta-core_${scala.compiler.version}</artifactId>
+		    <version>0.4.0</version>
+		</dependency>
 
 		<!-- for testing -->
 		<dependency>
 			<groupId>org.scalatest</groupId>
-			<artifactId>scalatest_2.11</artifactId>
+			<artifactId>scalatest_${scala.compiler.version}</artifactId>
 			<version>3.0.1</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.apache.spark</groupId>
-			<artifactId>spark-core_2.11</artifactId>
+			<artifactId>spark-core_${scala.compiler.version}</artifactId>
 			<version>${spark.version}</version>
 			<type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.holdenkarau</groupId>
-			<artifactId>spark-testing-base_2.11</artifactId>
+			<artifactId>spark-testing-base_${scala.compiler.version}</artifactId>
 			<version>1.6.1_0.3.3</version>
 			<scope>test</scope>
 			<exclusions>
@@ -68,12 +59,12 @@
 					<artifactId>slf4j-api</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency>
-		<dependency> <!-- Dependency needed for spark-testing-base for testing DF -->
+		</dependency> -->
+		<!-- <dependency> Dependency needed for spark-testing-base for testing DF
 			<groupId>org.apache.spark</groupId>
-			<artifactId>spark-hive_2.11</artifactId>
+			<artifactId>spark-hive_${scala.compiler.version}</artifactId>
 			<version>${spark.version}</version>
-		</dependency>
+		</dependency> -->
 		<!-- <dependency> <groupId>MrPowers</groupId> <artifactId>spark-fast-tests</artifactId> 
 			<version>2.3.0_0.14.1</version> <scope>test</scope> </dependency> -->
 		<dependency>

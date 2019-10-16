@@ -2,7 +2,6 @@ package examples
 
 import util.SparkUtil._
 import org.apache.spark.sql.functions._
-import org.apache.avro.ipc.specific.Person
 import org.apache.spark.sql.Encoders
 
 case class Pat(pat_id:String, firstname:String, lastName:String, encounters:List[Enc])
