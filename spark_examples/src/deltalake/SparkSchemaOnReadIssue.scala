@@ -26,16 +26,13 @@ object SparkSchemaOnReadIssue {
     val actors_new = Seq(BollyWoodActorNew("Vicky", "Kaushal", 900000002, 200.05),
       BollyWoodActorNew("Ayushman", "Khurrana", 900000004, 201.44)).toDF
 
-    actors_old.write.mode(SaveMode.Overwrite).option("header", "true").csv(writeLocation)
-    actors_new.write.mode(SaveMode.Append).option("header", "true").csv(writeLocation)
+    actors_old.write.mode(SaveMode.Overwrite).parquet(writeLocation)
+    actors_new.write.mode(SaveMode.Append).parquet(writeLocation)
 
     println("Write to the location is succesful")
 
     val df = spark.read
-      .format("csv")
-      .option("header", "true") // Use first line of all files as header
-      .option("inferSchema", "true") // Automatically infer data types
-      .load(writeLocation)
+      .parquet(writeLocation)
     println("Showing the appended file data")
     
     //ISSUE - the problem is, the DataType has changed from Int to Double which will be an issue
