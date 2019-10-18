@@ -1,6 +1,0 @@
-PatientID,FirstName,MiddleName,LastName,Gender,City,ZipCode,State,EffFromDate,EffToDate,BirthDate
-101,Rakesh,Kumar,Sinha,M,Mumbai,400123,MH,1/1/2010,12/31/9999,8/23/1960
-102,Ajaj,,Pathan,M,Pune,400234,MH,2/1/2017,12/31/9999,8/20/1975
-103,Shariq,,Tyeb,M,Nagpur,300234,MH,3/1/2011,12/31/9999,7/25/1987
-104,Harshal,,Chaudhari,M,Delhi,200345,DL,8/20/2012,12/31/9999,1/6/1993
-105,Malkhan,Singh,Rana,M,Chennai,100456,TN,5/13/2016,12/31/9999,8/27/1960
