@@ -33,13 +33,16 @@
 		    <groupId>org.apache.spark</groupId>
 		    <artifactId>spark-streaming_${scala.compiler.version}</artifactId>
 		    <version>${spark.version}</version>
-		    <scope>provided</scope>
 		</dependency>
-		<dependency> <!-- for connecting spark with kafka -->
+		<dependency> <!-- Needed for D streaming in spark and Kafka, can be removed -->
 			<groupId>org.apache.spark</groupId>
 			<artifactId>spark-streaming-kafka-0-10_${scala.compiler.version}</artifactId>
 			<version>${spark.version}</version>
-			<scope>provided</scope>
+		</dependency>
+		<dependency> <!-- for Structured Streaming spark with kafka -->
+			<groupId>org.apache.spark</groupId>
+			<artifactId>spark-sql-kafka-0-10_${scala.compiler.version}</artifactId>
+			<version>${spark.version}</version>
 		</dependency>
 
 		<!-- for testing -->
