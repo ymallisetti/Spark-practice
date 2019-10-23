@@ -29,6 +29,18 @@
 		    <artifactId>delta-core_${scala.compiler.version}</artifactId>
 		    <version>0.4.0</version>
 		</dependency>
+		<dependency>
+		    <groupId>org.apache.spark</groupId>
+		    <artifactId>spark-streaming_${scala.compiler.version}</artifactId>
+		    <version>${spark.version}</version>
+		    <scope>provided</scope>
+		</dependency>
+		<dependency> <!-- for connecting spark with kafka -->
+			<groupId>org.apache.spark</groupId>
+			<artifactId>spark-streaming-kafka-0-10_${scala.compiler.version}</artifactId>
+			<version>${spark.version}</version>
+			<scope>provided</scope>
+		</dependency>
 
 		<!-- for testing -->
 		<dependency>
