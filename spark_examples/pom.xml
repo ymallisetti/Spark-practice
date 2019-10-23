@@ -37,36 +37,6 @@
 			<version>3.0.1</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- <dependency>
-			<groupId>org.apache.spark</groupId>
-			<artifactId>spark-core_${scala.compiler.version}</artifactId>
-			<version>${spark.version}</version>
-			<type>test-jar</type>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.holdenkarau</groupId>
-			<artifactId>spark-testing-base_${scala.compiler.version}</artifactId>
-			<version>1.6.1_0.3.3</version>
-			<scope>test</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-log4j12</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-api</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency> -->
-		<!-- <dependency> Dependency needed for spark-testing-base for testing DF
-			<groupId>org.apache.spark</groupId>
-			<artifactId>spark-hive_${scala.compiler.version}</artifactId>
-			<version>${spark.version}</version>
-		</dependency> -->
-		<!-- <dependency> <groupId>MrPowers</groupId> <artifactId>spark-fast-tests</artifactId> 
-			<version>2.3.0_0.14.1</version> <scope>test</scope> </dependency> -->
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
@@ -75,6 +45,7 @@
 		</dependency>
 		<!-- for testing ends -->
 
+		<!-- Scala language modules dependencies -->
 		<dependency>
 			<groupId>org.scala-lang</groupId>
 			<artifactId>scala-xml</artifactId>
@@ -101,6 +72,7 @@
 			<artifactId>scala-reflect</artifactId>
 			<version>${scala.version}</version>
 		</dependency>
+		<!-- Scala language modules dependencies -->
 
 		<!-- Azure dependencies -->
 		<dependency>
